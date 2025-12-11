@@ -1,6 +1,6 @@
 <?php
 
-class Extension_cachelite extends Extension
+class Extension_xcachelite extends Extension
 {
     protected $_cacheLite = null;
     protected $_lifetime = null;

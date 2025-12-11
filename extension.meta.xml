@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="cachelite" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
-  <name>CacheLite</name>
+<extension id="xcachelite" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
+  <name>xCacheLite</name>
   <description>Simple frontend output caching with CacheLite.</description>
   <repo type="github">https://github.com/symphonists/cachelite</repo>
   <url type="issues">https://github.com/symphonists/cachelite/issues</url>
