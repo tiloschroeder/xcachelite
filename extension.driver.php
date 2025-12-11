@@ -222,7 +222,7 @@ class Extension_cachelite extends Extension
         $hidden = Widget::Input('settings[cachelite][show-comments]', 'no', 'hidden');
         $input = Widget::Input('settings[cachelite][show-comments]', 'yes', 'checkbox');
         $input->setAttribute('id', 'cachelite-show-comments');
-        if (Symphony::Configuration()->get('show-comments', 'cachelite') == 'yes') {
+        if (Symphony::Configuration()->get('show-comments', 'cachelite') === 'yes') {
             $input->setAttribute('checked', 'checked');
         }
         $label->setValue(__('%s Show comments in page source?', array($hidden->generate() . $input->generate())));
@@ -233,7 +233,7 @@ class Extension_cachelite extends Extension
         $hidden = Widget::Input('settings[cachelite][backend-delegates]', 'no', 'hidden');
         $input = Widget::Input('settings[cachelite][backend-delegates]', 'yes', 'checkbox');
         $input->setAttribute('id', 'cachelite-backend-delegates');
-        if (Symphony::Configuration()->get('backend-delegates', 'cachelite') == 'yes') {
+        if (Symphony::Configuration()->get('backend-delegates', 'cachelite') === 'yes') {
             $input->setAttribute('checked', 'checked');
         }
         $label->setValue( __('%s Expire cache when entries are created/updated through the backend?', array($hidden->generate() . $input->generate())));
@@ -364,7 +364,7 @@ class Extension_cachelite extends Extension
                     header("Content-Type: $content_type;");
                 }
 
-                if ($type{0} == '.') {
+                if ($type[0] === '.') {
                     $FileName = $this->_pagedata['handle'];
                     header("Content-Disposition: attachment; filename={$FileName}{$type}");
                 }
@@ -380,7 +380,7 @@ class Extension_cachelite extends Extension
         }
 
         $logged_in = Symphony::isLoggedIn();
-        if ($logged_in && array_key_exists('flush', $this->_get) && $this->_get['flush'] == 'site') {
+        if ($logged_in && array_key_exists('flush', $this->_get) && $this->_get['flush'] === 'site') {
             unset($this->_get['flush']);
             $this->_cacheLite->clean(self::CACHE_GROUP);
             $this->updateFromGetValues();
@@ -402,8 +402,8 @@ class Extension_cachelite extends Extension
                 $modified = $this->_cacheLite->lastModified();
                 $modified_gmt = gmdate('r', $modified);
                 if (
-                    $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $modified_gmt
-                    || str_replace('"', NULL, stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $this->computeEtag()
+                    $_SERVER['HTTP_IF_MODIFIED_SINCE'] === $modified_gmt
+                    || str_replace('"', NULL, stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) === $this->computeEtag()
                 ) {
                     Page::renderStatusCode(Page::HTTP_NOT_MODIFIED);
                     exit();
@@ -466,8 +466,9 @@ class Extension_cachelite extends Extension
             return;
         }
         try {
-            $xml = @DomDocument::loadXML($context['xml']->generate());
-            if (!$xml) {
+            $xml = new DOMDocument();
+            $success = $xml->loadXML($context['xml']->generate());
+            if (!$success) {
                 return;
             }
             $xpath = new DOMXPath($xml);
@@ -493,7 +494,7 @@ class Extension_cachelite extends Extension
 
     public function entryCreate($context)
     {
-        if (Symphony::Configuration()->get('backend-delegates', 'cachelite') == 'no') {
+        if (Symphony::Configuration()->get('backend-delegates', 'cachelite') === 'no') {
             return;
         }
         // flush by Section ID
@@ -504,7 +505,7 @@ class Extension_cachelite extends Extension
 
     public function entryEdit($context)
     {
-        if (Symphony::Configuration()->get('backend-delegates', 'cachelite') == 'no') {
+        if (Symphony::Configuration()->get('backend-delegates', 'cachelite') === 'no') {
             return;
         }
         // flush by Entry ID
@@ -515,7 +516,7 @@ class Extension_cachelite extends Extension
 
     public function entryDelete($context)
     {
-        if (Symphony::Configuration()->get('backend-delegates', 'cachelite') == 'no') {
+        if (Symphony::Configuration()->get('backend-delegates', 'cachelite') === 'no') {
             return;
         }
         $ids = !is_array($context['entry_id']) ? array($context['entry_id']) : $context['entry_id'];
@@ -609,7 +610,7 @@ class Extension_cachelite extends Extension
 
     private function inExcludedPages()
     {
-        $segments = explode('/', $this->_get['symphony-page']);
+        $segments = explode('/', $this->_get['symphony-page'] ?? null);
         $domain = explode('/', DOMAIN);
         foreach ($segments as $key => $segment) {
             if (in_array($segment, $domain) || empty($segment)) {
@@ -642,7 +643,7 @@ class Extension_cachelite extends Extension
             return true;
         }
         // perfect match
-        elseif (strcasecmp($r, $path) == 0) {
+        elseif (strcasecmp($r, $path) === 0) {
             return true;
         }
         // wildcards
@@ -848,7 +849,7 @@ class Extension_cachelite extends Extension
 
     private function isGetRequest()
     {
-        return $_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD';
+        return $_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'HEAD';
     }
 
     private function isErrorTemplate()
