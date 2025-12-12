@@ -398,12 +398,15 @@ class Extension_xcachelite extends Extension
             }
 
             // Try to return 304
-            if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) || isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+            $ifModifiedSince = $_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? null;
+            $ifNoneMatch = $_SERVER['HTTP_IF_NONE_MATCH'] ?? null;
+
+            if (isset($ifModifiedSince) || isset($ifNoneMatch)) {
                 $modified = $this->_cacheLite->lastModified();
                 $modified_gmt = gmdate('r', $modified);
                 if (
-                    $_SERVER['HTTP_IF_MODIFIED_SINCE'] === $modified_gmt
-                    || str_replace('"', NULL, stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) === $this->computeEtag()
+                    $ifModifiedSince === $modified_gmt
+                    || str_replace('"', NULL, stripslashes($ifNoneMatch)) === $this->computeEtag()
                 ) {
                     Page::renderStatusCode(Page::HTTP_NOT_MODIFIED);
                     exit();
