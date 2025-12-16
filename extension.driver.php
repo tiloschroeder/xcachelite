@@ -336,6 +336,10 @@ class Extension_xcachelite extends Extension
         // Cache headers
         $lastModified = $this->_cacheLite->lastModified();
         $etag = $this->computeEtag();
+        if ($cacheHit === 'HIT') {
+            header("X-Content-Type-Options: nosniff");
+            header("X-XSS-Protection: 1; mode=block");
+        }
         header("Cache-Control: public, max-age=" . $this->_lifetime . ", must-revalidate");
         header("Expires: " . gmdate("D, d M Y H:i:s", $lastModified + $this->_lifetime) . " GMT");
         header("Last-Modified: " . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
@@ -344,6 +348,9 @@ class Extension_xcachelite extends Extension
         header("X-Frame-Options: SAMEORIGIN");
         header("X-Cache-Status: $cacheHit");
         header_remove('Pragma');
+        if ($this->getCommentPref() === 'yes') {
+            header("X-Cache-Lite: " . $this->_cacheLite->_fileName);
+        }
         // Add custom content type
         if (
             !isset($this->_pagedata['type'])
