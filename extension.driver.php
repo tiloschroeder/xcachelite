@@ -801,7 +801,7 @@ class Extension_xcachelite extends Extension
             KEY `page` (`page`),
             KEY `section_page` (`page`, `section_id`),
             KEY `entry_page` (`page`, `entry_id`)
-        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ");
     }
 
@@ -815,7 +815,7 @@ class Extension_xcachelite extends Extension
             PRIMARY KEY (`section_id`, `entry_id`),
             KEY `section_id` (`section_id`),
             KEY `entry_id` (`entry_id`)
-        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ");
     }
 
