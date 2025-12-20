@@ -53,9 +53,10 @@ class Extension_xcachelite extends Extension
         }
 
         // Base configuration
-        Symphony::Configuration()->set('lifetime', '86400', 'cachelite');
-        Symphony::Configuration()->set('show-comments', 'no', 'cachelite');
-        Symphony::Configuration()->set('backend-delegates', 'no', 'cachelite');
+        Symphony::Configuration()->set('lifetime', '0', 'cachelite');
+        Symphony::Configuration()->set('show-comments', 'yes', 'cachelite');
+        Symphony::Configuration()->set('backend-delegates', 'yes', 'cachelite');
+        Symphony::Configuration()->set('clean-strategy', 'no', 'cachelite');
 
         return Symphony::Configuration()->write();
     }
